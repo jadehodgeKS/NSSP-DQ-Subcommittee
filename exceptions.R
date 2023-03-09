@@ -16,18 +16,18 @@ table_list <- as.data.frame(dbListTables(datamart))
 except_col_names <- as.data.frame(dbListFields(datamart, "KS_PR_Except"))   # Use your state initials
 except_reason_col_names <- as.data.frame(dbListFields(datamart, "KS_PR_Except_Reason")) # Use your state initials
 
+# Except Reasons -------------------------------------------------------------
+except_reasons <- dbGetQuery(datamart, 
+    "SELECT exceptions_reason_code, exceptions_reason
+     FROM except_reasons
+     ")
+
 # Pulling Site MFT -------------------------------------------------------
     # Use your state initials in FROM
 mft <- dbGetQuery(datamart, 
   "SELECT c_biosense_facility_id, facility_name
    FROM ks_mft          
    ")
-
-# Except Reasons -------------------------------------------------------------
-except_reasons <- dbGetQuery(datamart, 
-    "SELECT exceptions_reason_code, exceptions_reason
-     FROM except_reasons
-     ")
 
 # Exceptions Message Count -------------------------------------------------------------
     # Use your state initials in FROM
@@ -75,7 +75,7 @@ all_except <- dbGetQuery(datamart,
     # Subsetting the records where C_BioSense_Facility_ID = NA
         except_na <- all_except[is.na(all_except$c_biosense_facility_id),]
 
-# Merge with Exceptions Reasons
+# Pulling records from ks_st_except_reason
     # Use your State initials in FROM
     # Adjust exception_date
 except_reason_msgs <- dbGetQuery(datamart, 
@@ -96,10 +96,11 @@ except_msgs_code_reason <- left_join(msgs_codes, except_reasons,
     # short scripts to retrieve raw msgs from exceptions tables
     # be sure to change State initials, date, etc.
     # write.table creates a text file of raw msgs
+
 msgs <- dbGetQuery(datamart, 
     "SELECT message
      FROM ks_st_raw
-     WHERE feed_name = 'KSAdvent' and arrived_date_time > '2023-02-20'
+     WHERE arrived_date_time > '2023-02-20'
      ")
 write.table(msgs, file = "msgs.txt", quote = F, row.names=F, col.names=F)
 
