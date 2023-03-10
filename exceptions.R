@@ -35,7 +35,7 @@ mft <- dbGetQuery(datamart,
 facility_except_msgs <- dbGetQuery(datamart, 
     "SELECT c_biosense_facility_id, count(message_id) as msg_count
      FROM ks_st_except
-     WHERE arrived_date_time > '2023-02-20'
+     WHERE arrived_date_time > '2023-01-01'
      GROUP BY c_biosense_facility_id
      ")
     # Join Name to Exceptions
@@ -54,8 +54,8 @@ except_one <- dbGetQuery(datamart,
           admit_date_time, admit_reason_description, medical_record_number, c_chief_complaint,
           chief_complaint_text, diagnosis_code, diagnosis_description, 
           c_unique_patient_id, processing_id, exceptions_id
-   FROM ks_pr_except
-   WHERE c_biosense_facility_id in (3893) and arrived_date_time > '2023-02-01'")
+   FROM ks_st_except
+   WHERE c_biosense_facility_id in (3861) and arrived_date_time > '2023-01-01'")
         
 # Joining exceptions records to except_reasons  ---------------------------------------------------
 # Pulling all records that have arrived in the exception table
@@ -69,7 +69,7 @@ all_except <- dbGetQuery(datamart,
           admit_date_time, admit_reason_description, medical_record_number, 
           c_chief_complaint, chief_complaint_text, c_unique_patient_id, processing_id
      FROM ks_st_except
-     WHERE arrived_date_time > '2023-03-01'
+     WHERE arrived_date_time > '2023-01-01'
      ")        
 
     # Subsetting the records where C_BioSense_Facility_ID = NA
@@ -81,7 +81,7 @@ all_except <- dbGetQuery(datamart,
 except_reason_msgs <- dbGetQuery(datamart, 
     "SELECT message_id, exceptions_reason_code, ks_exceptions_reason_id, exception_date
      FROM ks_st_except_reason
-     WHERE exception_date > '2023-03-01'
+     WHERE exception_date > '2023-01-01'
      ")
 
 # Adds except_reasons_msgs to the end of all_except using message_id
@@ -108,7 +108,7 @@ msgs <- dbGetQuery(datamart,
     "select Message
     from ks_st_except left join ks_st_raw
       on [ks_st_except].Message_ID=[ks_st_raw].Message_ID
-    where C_Visit_Date > '2023-01-01' and C_Biosense_Facility_ID='3858'")
+    where C_Visit_Date > '2023-01-01' and C_Biosense_Facility_ID='3861'")
 
 msgs <- dbGetQuery(datamart,
     "select Message
