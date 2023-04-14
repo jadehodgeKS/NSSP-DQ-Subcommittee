@@ -110,8 +110,8 @@ except_msgs_reasons <- left_join(join_msgs_codes, except_reasons,
 
 
 # Raw Exceptions Messages ----------------------------------------------------------------------------------
-    # short scripts to retrieve raw msgs from exceptions tables
-    # be sure to change State initials, date, table, etc.
+    # These are short scripts to retrieve raw msgs
+    # Update State initials, c_biosense_facility_id, date, table, etc.
     # write.table creates a text file of raw msgs
 
 msgs <- dbGetQuery(datamart, 
